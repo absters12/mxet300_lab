@@ -8,8 +8,8 @@ import csv      # for handling comma-separated-values file type
 
 # A function for populating 2 text files with updating variables
 def logArray(values):                                       # this function takes a 2-element array called val
-    txt = open("/home/pi/mxet300_lab-1/a.txt", 'w+')           # file for generic variable a
-    txt2 = open("/home/pi/mxet300_lab-1/b.txt", 'w+')          # file for generic variable b
+    txt = open("/home/pi/mxet300_lab/a.txt", 'w+')           # file for generic variable a
+    txt2 = open("/home/pi/mxet300_lab/b.txt", 'w+')          # file for generic variable b
     a = round(values[0], 2)
     b = round(values[1], 2)
     txt.write(str(a))
