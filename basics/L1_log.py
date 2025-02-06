@@ -26,14 +26,14 @@ def uniqueFile(value, fileName):                                    # this funct
 
 # A function for sending 1 value to a log file in a temporary folder
 def tmpFile(value, fileName):                               # this function takes a 2-element array called val
-    txt = open("/tmp/" + fileName, 'w+')                    # file with specified name
+    txt = open("mxet300_lab" + fileName, 'w+')                    # file with specified name
     myValue = round(value, 2)
     txt.write(str(myValue))
     txt.close()
     
 # A function for saving a single line string to a log file in a temporary folder
 def stringTmpFile(myString, fileName):     # this function takes a string and filename
-    txt = open("/home/pi/mxet300_lab" + fileName, 'w+')   # file with specified name
+    txt = open("mxet300_lab" + fileName, 'w+')   # file with specified name
     txt.write(myString)                    # by default the existing txt is overwritten
     txt.close()
 

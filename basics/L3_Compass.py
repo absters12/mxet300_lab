@@ -1,7 +1,7 @@
 import time
 import L1_log as log
 from L2_compass_heading import get_heading
-
+from L2_telemetry import voltage_val
 
 def cardinal(heading):
     if -22.5 <= heading <= 22.5:
@@ -30,7 +30,8 @@ def cardinal(heading):
 while True:
     heading = get_heading()
     print(str(heading) + " degrees")
-    log.logArray([0 ,round(heading, 2)])
+    
+    log.logArray([round(voltage, 2) ,round(heading, 2)])
     cardinal(heading)
 
     time.sleep(1)

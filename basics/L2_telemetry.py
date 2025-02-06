@@ -2,9 +2,9 @@ from L1_ina import readVolts
 import time
 import L1_log as log
 
-while True:
+def voltage_val():
     voltage = readVolts()
     print(str(voltage) + "V")
-    log.logArray([round(voltage, 2), 0])
+    log.tmpFile(direction, "voltage_value.txt")
     time.sleep(1)
 
