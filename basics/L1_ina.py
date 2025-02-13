@@ -4,6 +4,8 @@
 import time                 # for keeping time
 from adafruit_ina219 import INA219
 import board
+import L1_log as log
+
 
 # Set up the INA219 sensor
 i2c = board.I2C()
@@ -33,6 +35,8 @@ def read():
 def readVolts():
     battery_voltage = ina219.bus_voltage + ina219.shunt_voltage
     volts = round(battery_voltage, 2)
+    log.tmpFile(battery_voltage, "voltage_val.txt")
+
     return volts
 
 

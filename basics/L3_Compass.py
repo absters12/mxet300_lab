@@ -25,13 +25,11 @@ def cardinal(heading):
 
     print(direction)
     log.stringTmpFile(direction, "compass_direction.txt")
+    log.tmpFile(heading, "compass_direction_val.txt")
 
 
 while True:
     heading = get_heading()
     print(str(heading) + " degrees")
-    
-    log.logArray([round(voltage, 2) ,round(heading, 2)])
     cardinal(heading)
-
     time.sleep(1)
