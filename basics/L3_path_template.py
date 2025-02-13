@@ -35,4 +35,8 @@ for  count, motion in enumerate(motions):
     print("Motion: ", count+1, "\t Chassis Forward Velocity (m/s): {:.2f} \t Chassis Angular Velocity (rad/s): {:.2f} \t Duration (sec): {:.2f}".format(motion[0], motion[1], motion[2]))
     wheel_speeds = ik.getPdTargets(motion[:2])                  # take the forward speed(m/s) and turning speed(rad/s) and use inverse kinematics to deterimine wheel speeds
     sc.driveOpenLoop(wheel_speeds)                              # take the calculated wheel speeds and use them to run the motors
+
+    log.tmpFile(motion[0], "_x_dot.txt")
+    log.tmpFile(motion[1], "_theta_dot.txt")
+
     sleep(motion[2])                                            # wait the motion duration
