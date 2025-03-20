@@ -1,0 +1,456 @@
+[
+    {
+        "id": "ebcfcbf0.460c38",
+        "type": "tab",
+        "label": "Joystick Control",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "fcfdab90.e3e398",
+        "type": "ui_joystick",
+        "z": "ebcfcbf0.460c38",
+        "name": "Joystick",
+        "group": "b5c05cb9.3a8b7",
+        "order": 1,
+        "width": 7,
+        "height": 5,
+        "trigger": "all",
+        "timeInterval": "50",
+        "useThemeColor": false,
+        "color": "#f10404",
+        "threshold": "0.1",
+        "directions": "all",
+        "shape": "circle",
+        "centerAtRelease": true,
+        "x": 200,
+        "y": 140,
+        "wires": [
+            [
+                "c77ef1a0.d1b5d",
+                "80ccc084.4aa8c"
+            ]
+        ]
+    },
+    {
+        "id": "c77ef1a0.d1b5d",
+        "type": "function",
+        "z": "ebcfcbf0.460c38",
+        "name": "selector",
+        "func": "msg.topic = \"one_joystick\"\nmsg.payload = msg.payload.vector\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 140,
+        "wires": [
+            [
+                "a075c338.4c942"
+            ]
+        ]
+    },
+    {
+        "id": "a075c338.4c942",
+        "type": "join",
+        "z": "ebcfcbf0.460c38",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "1",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 600,
+        "y": 140,
+        "wires": [
+            [
+                "dcee2977.ed6268"
+            ]
+        ]
+    },
+    {
+        "id": "dcee2977.ed6268",
+        "type": "json",
+        "z": "ebcfcbf0.460c38",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": true,
+        "x": 760,
+        "y": 140,
+        "wires": [
+            [
+                "f5207313.822de"
+            ]
+        ]
+    },
+    {
+        "id": "f5207313.822de",
+        "type": "udp out",
+        "z": "ebcfcbf0.460c38",
+        "name": "SCUTTLE",
+        "addr": "127.0.0.1",
+        "iface": "",
+        "port": "3553",
+        "ipv": "udp4",
+        "outport": "",
+        "base64": false,
+        "multicast": "false",
+        "x": 940,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "80ccc084.4aa8c",
+        "type": "udp out",
+        "z": "ebcfcbf0.460c38",
+        "name": "",
+        "addr": "127:0:0:1",
+        "iface": "",
+        "port": "3554",
+        "ipv": "udp4",
+        "outport": "",
+        "base64": false,
+        "multicast": "false",
+        "x": 540,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "dd4e6b02.928e78",
+        "type": "inject",
+        "z": "ebcfcbf0.460c38",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 240,
+        "y": 300,
+        "wires": [
+            [
+                "a04099be.1e6f58",
+                "9112d17e.72616",
+                "1d9eccf3.d71293",
+                "e50dffde.e050a",
+                "d6c17f79.d1d33"
+            ]
+        ]
+    },
+    {
+        "id": "a04099be.1e6f58",
+        "type": "file in",
+        "z": "ebcfcbf0.460c38",
+        "name": "",
+        "filename": "/home/pi/mxet300_lab/basics/mxet300_lab_x_dot.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 570,
+        "y": 300,
+        "wires": [
+            [
+                "c506ba07.0c2cf8"
+            ]
+        ]
+    },
+    {
+        "id": "c506ba07.0c2cf8",
+        "type": "ui_chart",
+        "z": "ebcfcbf0.460c38",
+        "name": "",
+        "group": "6dbde9a8.c27708",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Forward Velocity (m/s)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "30",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "1",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 960,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9112d17e.72616",
+        "type": "file in",
+        "z": "ebcfcbf0.460c38",
+        "name": "",
+        "filename": "/home/pi/mxet300_lab/basics/mxet300_lab_theta_dot.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 570,
+        "y": 360,
+        "wires": [
+            [
+                "1dbb434e.35260d"
+            ]
+        ]
+    },
+    {
+        "id": "1dbb434e.35260d",
+        "type": "ui_chart",
+        "z": "ebcfcbf0.460c38",
+        "name": "",
+        "group": "6dbde9a8.c27708",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Angular Velocity (rad/s)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "30",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "1",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 980,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1d9eccf3.d71293",
+        "type": "file in",
+        "z": "ebcfcbf0.460c38",
+        "name": "Pi Voltage",
+        "filename": "/home/pi/mxet300_lab/basics/mxet300_labvoltage_val.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 480,
+        "y": 460,
+        "wires": [
+            [
+                "17f1994b.e35b17"
+            ]
+        ]
+    },
+    {
+        "id": "17f1994b.e35b17",
+        "type": "ui_gauge",
+        "z": "ebcfcbf0.460c38",
+        "name": "Voltage",
+        "group": "d6608bab.2d3048",
+        "order": 0,
+        "width": "0",
+        "height": "0",
+        "gtype": "gage",
+        "title": "Battery Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "12",
+        "colors": [
+            "#b30000",
+            "#e6e600",
+            "#1eff00"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 660,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "e50dffde.e050a",
+        "type": "file in",
+        "z": "ebcfcbf0.460c38",
+        "name": "Cardinal",
+        "filename": "/home/pi/mxet300_lab/basics/mxet300_labcompass_direction.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 480,
+        "y": 500,
+        "wires": [
+            [
+                "cb0ddfd.8cd372"
+            ]
+        ]
+    },
+    {
+        "id": "cb0ddfd.8cd372",
+        "type": "ui_text",
+        "z": "ebcfcbf0.460c38",
+        "group": "2676c394.00409c",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Cardinal Direction: ",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 690,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "d6c17f79.d1d33",
+        "type": "file in",
+        "z": "ebcfcbf0.460c38",
+        "name": "Coordinates",
+        "filename": "/home/pi/mxet300_lab/basics/mxet300_labcompass_direction_val.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 490,
+        "y": 540,
+        "wires": [
+            [
+                "52c11824.96ff58"
+            ]
+        ]
+    },
+    {
+        "id": "52c11824.96ff58",
+        "type": "ui_gauge",
+        "z": "ebcfcbf0.460c38",
+        "name": "Compass",
+        "group": "2676c394.00409c",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "compass",
+        "title": "Compass",
+        "label": "Degrees",
+        "format": "{{value}}",
+        "min": "-180",
+        "max": "180",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 660,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "b5c05cb9.3a8b7",
+        "type": "ui_group",
+        "name": "Joystick",
+        "tab": "fef5ae81.11f63",
+        "order": 1,
+        "disp": false,
+        "width": "7",
+        "collapse": false
+    },
+    {
+        "id": "6dbde9a8.c27708",
+        "type": "ui_group",
+        "name": "Velocity Graph",
+        "tab": "fef5ae81.11f63",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "d6608bab.2d3048",
+        "type": "ui_group",
+        "name": "Battery Voltage",
+        "tab": "fef5ae81.11f63",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "2676c394.00409c",
+        "type": "ui_group",
+        "name": "Compass",
+        "tab": "fef5ae81.11f63",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "fef5ae81.11f63",
+        "type": "ui_tab",
+        "name": "Joystick",
+        "icon": "adjust",
+        "order": 3,
+        "disabled": false,
+        "hidden": false
+    }
+]

@@ -1,0 +1,101 @@
+[
+    {
+        "id": "6cdf9879.8a3728",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "b02fc9cb.9cf058",
+        "type": "inject",
+        "z": "6cdf9879.8a3728",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 180,
+        "wires": [
+            [
+                "ff476447.6f6fd8"
+            ]
+        ]
+    },
+    {
+        "id": "ff476447.6f6fd8",
+        "type": "file in",
+        "z": "6cdf9879.8a3728",
+        "name": "Pi Voltage",
+        "filename": "/home/pi/mxet300_lab/a.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 300,
+        "y": 180,
+        "wires": [
+            [
+                "8b280a1e.a6d008"
+            ]
+        ]
+    },
+    {
+        "id": "8b280a1e.a6d008",
+        "type": "ui_gauge",
+        "z": "6cdf9879.8a3728",
+        "name": "Voltage",
+        "group": "bed244d8.06cc38",
+        "order": 0,
+        "width": "0",
+        "height": "0",
+        "gtype": "gage",
+        "title": "Battery Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "12",
+        "colors": [
+            "#b30000",
+            "#e6e600",
+            "#1eff00"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 460,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "bed244d8.06cc38",
+        "type": "ui_group",
+        "name": "Voltage",
+        "tab": "2bd3c12a.8b871e",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "2bd3c12a.8b871e",
+        "type": "ui_tab",
+        "name": "Voltage",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]

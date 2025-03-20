@@ -1,0 +1,552 @@
+[
+    {
+        "id": "4a1d43f4.ff073c",
+        "type": "tab",
+        "label": "LIDAR Map",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "3846208e.4e493",
+        "type": "template",
+        "z": "4a1d43f4.ff073c",
+        "name": "Create the msg.template to use",
+        "field": "template",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<canvas id=\"bubble-chart\" width=\"1\" height=\"1\"></canvas>\n\n<script>\nnew Chart(document.getElementById(\"bubble-chart\"), {\n    type: 'bubble',\n    data: {\n      labels: \"label\",\n      datasets: [\n        {\n          label: \"{{{payload.legend1}}}\",\n          backgroundColor: \"rgba(255, 255, 255, 0.3000)\",\n          borderColor: \"rgba(255,255,255,0.3000)\",\n          data: [\n            {{{payload.data1}}}\n          ]\n        },\n        {\n          label: \"{{{payload.legend2}}}\",\n          backgroundColor: \"rgba(255, 0, 0, 0.3000)\",\n          borderColor: \"rgba(255,0,0,0.3000)\",\n          data: [\n            {{{payload.data2}}}\n          ]\n        }\n      ]\n    },\n    options: {\n        animation: false,\n        legend: {\n            display: true,\n            labels: {\n                fontColor: 'rgb(255, 255, 255)'\n            }\n        },\n    title: {\n        display: true,\n        text: '{{{payload.title}}}',\n        fontColor: 'rgb(255, 255, 255)'\n      }, scales: {\n        yAxes: [{ \n            ticks: {\n                min: -2.5, // minimum value\n                max: 2.5 // maximum value\n            },\n          scaleLabel: {\n            display: true,\n            labelString: \"Y [m]\",\n            fontColor: 'rgb(255, 255, 255)'\n          }\n        }],\n        xAxes: [{ \n            ticks: {\n                min: -2.5, // minimum value\n                max: 2.5 // maximum value\n            },\n          scaleLabel: {\n            display: true,\n            labelString: \"X [m]\",\n            fontColor: 'rgb(255, 255, 255)'\n          }\n        }]\n      }\n    }\n});\n\n</script>\n",
+        "output": "str",
+        "x": 870,
+        "y": 260,
+        "wires": [
+            [
+                "11b0ec5.6409c14"
+            ]
+        ]
+    },
+    {
+        "id": "11b0ec5.6409c14",
+        "type": "ui_template",
+        "z": "4a1d43f4.ff073c",
+        "group": "bfbd69a3.7f8268",
+        "name": "LIDAR Plot",
+        "order": 1,
+        "width": 10,
+        "height": 10,
+        "format": "",
+        "storeOutMessages": false,
+        "fwdInMessages": true,
+        "resendOnRefresh": false,
+        "templateScope": "local",
+        "x": 1150,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "60e09bd7.202a54",
+        "type": "udp in",
+        "z": "4a1d43f4.ff073c",
+        "name": "SCUTTLE",
+        "iface": "",
+        "port": "3555",
+        "ipv": "udp4",
+        "multicast": "false",
+        "group": "",
+        "datatype": "utf8",
+        "x": 180,
+        "y": 260,
+        "wires": [
+            [
+                "9125df13.c99f4"
+            ]
+        ]
+    },
+    {
+        "id": "9125df13.c99f4",
+        "type": "function",
+        "z": "4a1d43f4.ff073c",
+        "name": "Build chart payload",
+        "func": "var title = \"LIDAR Data\";\nvar legend1 = \"Points\";\nvar legend2 = \"Robot\";\n\nframe = '{x: 0.5, y: -0.25, r: 5},\\\n{x: 0.5, y: 0.25, r: 5},\\\n{x: -0.1, y: 0.25, r: 5},\\\n{x: -0.1, y: -0.25, r: 5},\\\n{x: 0.2, y: -0.25, r: 5},\\\n{x: 0.2, y: 0.25, r: 5},\\\n{x: 0.5, y: 0.0, r: 5},\\\n{x: -0.1, y: 0.0, r: 5},\\\n{x: 0.05, y: 0.25, r: 5},\\\n{x: 0.05, y: -0.25, r: 5},\\\n{x: 0.35, y: 0.25, r: 5},\\\n{x: 0.35, y: -0.25, r: 5},'\n\nmsg.payload = { \"title\"   : title,\n                \"legend1\" : legend1,\n                \"legend2\" : legend2,\n                \"data1\"   : msg.payload,\n                \"data2\"   : frame\n}\n                \nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 260,
+        "wires": [
+            [
+                "3846208e.4e493"
+            ]
+        ]
+    },
+    {
+        "id": "1da24f82.6b2d",
+        "type": "udp out",
+        "z": "4a1d43f4.ff073c",
+        "name": "SCUTTLE",
+        "addr": "127.0.0.1",
+        "iface": "",
+        "port": "3553",
+        "ipv": "udp4",
+        "outport": "",
+        "base64": false,
+        "multicast": "false",
+        "x": 970,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "1c3cbe79.a74dc2",
+        "type": "json",
+        "z": "4a1d43f4.ff073c",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": true,
+        "x": 790,
+        "y": 460,
+        "wires": [
+            [
+                "1da24f82.6b2d"
+            ]
+        ]
+    },
+    {
+        "id": "4eccc3ae.acdc0c",
+        "type": "function",
+        "z": "4a1d43f4.ff073c",
+        "name": "selector",
+        "func": "msg.topic = \"one_joystick\"\nmsg.payload = msg.payload.vector\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 460,
+        "wires": [
+            [
+                "76cb7248.ff826c"
+            ]
+        ]
+    },
+    {
+        "id": "76cb7248.ff826c",
+        "type": "join",
+        "z": "4a1d43f4.ff073c",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "1",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 630,
+        "y": 460,
+        "wires": [
+            [
+                "1c3cbe79.a74dc2"
+            ]
+        ]
+    },
+    {
+        "id": "d0abcfd1.88188",
+        "type": "ui_joystick",
+        "z": "4a1d43f4.ff073c",
+        "name": "Joystick",
+        "group": "bfbd69a3.7f8268",
+        "order": 12,
+        "width": 12,
+        "height": 2,
+        "trigger": "all",
+        "timeInterval": "50",
+        "useThemeColor": false,
+        "color": "#f10404",
+        "threshold": "0.1",
+        "directions": "all",
+        "shape": "circle",
+        "centerAtRelease": true,
+        "x": 230,
+        "y": 460,
+        "wires": [
+            [
+                "4eccc3ae.acdc0c"
+            ]
+        ]
+    },
+    {
+        "id": "f7be72e2.8f6b9",
+        "type": "inject",
+        "z": "4a1d43f4.ff073c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 600,
+        "wires": [
+            [
+                "1bf126ed.4dc0e9",
+                "e279d021.8d36a",
+                "50f4707e.4d3ba",
+                "10dfe250.2c5bce",
+                "3fa13579.55558a"
+            ]
+        ]
+    },
+    {
+        "id": "1bf126ed.4dc0e9",
+        "type": "file in",
+        "z": "4a1d43f4.ff073c",
+        "name": "X",
+        "filename": "/home/pi/mxet300_lab/basics/mxet300_lablidar_x.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 350,
+        "y": 600,
+        "wires": [
+            [
+                "b3913326.3730a"
+            ]
+        ]
+    },
+    {
+        "id": "b3913326.3730a",
+        "type": "ui_chart",
+        "z": "4a1d43f4.ff073c",
+        "name": "",
+        "group": "6594dcc6.736ef4",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "X coordinate",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-0.5",
+        "ymax": "0.5",
+        "removeOlder": "30",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "1",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 570,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e279d021.8d36a",
+        "type": "file in",
+        "z": "4a1d43f4.ff073c",
+        "name": "Y",
+        "filename": "/home/pi/mxet300_lab/basics/mxet300_lablidar_y.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 370,
+        "y": 660,
+        "wires": [
+            [
+                "d011bb04.22cfd8"
+            ]
+        ]
+    },
+    {
+        "id": "d011bb04.22cfd8",
+        "type": "ui_chart",
+        "z": "4a1d43f4.ff073c",
+        "name": "",
+        "group": "6594dcc6.736ef4",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Y coordinate",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-0.5",
+        "ymax": "0.5",
+        "removeOlder": "30",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "1",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 570,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "50f4707e.4d3ba",
+        "type": "file in",
+        "z": "4a1d43f4.ff073c",
+        "name": "Pi Voltage",
+        "filename": "/home/pi/mxet300_lab/basics/mxet300_labvoltage_val.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 380,
+        "y": 720,
+        "wires": [
+            [
+                "f1769543.29e888"
+            ]
+        ]
+    },
+    {
+        "id": "f1769543.29e888",
+        "type": "ui_gauge",
+        "z": "4a1d43f4.ff073c",
+        "name": "Voltage",
+        "group": "50a96c71.94d544",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Battery Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "12",
+        "colors": [
+            "#b30000",
+            "#e6e600",
+            "#1eff00"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 560,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "10dfe250.2c5bce",
+        "type": "file in",
+        "z": "4a1d43f4.ff073c",
+        "name": "Angle",
+        "filename": "/home/pi/mxet300_lab/basics/mxet300_lablidar_angle.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 370,
+        "y": 780,
+        "wires": [
+            [
+                "216b7ed.25cb382"
+            ]
+        ]
+    },
+    {
+        "id": "216b7ed.25cb382",
+        "type": "ui_gauge",
+        "z": "4a1d43f4.ff073c",
+        "name": "",
+        "group": "c1d55b37.dbb668",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "compass",
+        "title": "gauge",
+        "label": "Degrees",
+        "format": "{{value}}",
+        "min": "-180",
+        "max": "180",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 550,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "7b3096d4.786388",
+        "type": "ui_chart",
+        "z": "4a1d43f4.ff073c",
+        "name": "",
+        "group": "4c13ecba.2533c4",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Closest Object",
+        "chartType": "bar",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-0.5",
+        "ymax": "0.5",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 580,
+        "y": 840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3fa13579.55558a",
+        "type": "file in",
+        "z": "4a1d43f4.ff073c",
+        "name": "Distance",
+        "filename": "/home/pi/mxet300_lab/basics/mxet300_lablidar_dist.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 380,
+        "y": 840,
+        "wires": [
+            [
+                "7b3096d4.786388"
+            ]
+        ]
+    },
+    {
+        "id": "bfbd69a3.7f8268",
+        "type": "ui_group",
+        "name": "LIDAR Plot",
+        "tab": "5fb49e.81278b64",
+        "order": 1,
+        "disp": false,
+        "width": "12",
+        "collapse": false
+    },
+    {
+        "id": "6594dcc6.736ef4",
+        "type": "ui_group",
+        "name": "Cartesian Coordinates",
+        "tab": "5fb49e.81278b64",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "50a96c71.94d544",
+        "type": "ui_group",
+        "name": "Voltage",
+        "tab": "5fb49e.81278b64",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "c1d55b37.dbb668",
+        "type": "ui_group",
+        "name": "Angle",
+        "tab": "5fb49e.81278b64",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "4c13ecba.2533c4",
+        "type": "ui_group",
+        "name": "Distance",
+        "tab": "5fb49e.81278b64",
+        "order": 5,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "5fb49e.81278b64",
+        "type": "ui_tab",
+        "name": "LIDAR Mapping",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
